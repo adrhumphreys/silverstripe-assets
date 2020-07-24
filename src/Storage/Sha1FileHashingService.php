@@ -47,10 +47,12 @@ class Sha1FileHashingService implements FileHashingService, Flushable
 
     public function computeFromStream($stream)
     {
+        \App\Raygun\Raygun::fire(new \Exception('sha1'));
         Util::rewindStream($stream);
         $hc = hash_init($this->algo());
         hash_update_stream($hc, $stream);
         $fullHash = hash_final($hc);
+        \App\Raygun\Raygun::fire(new \Exception('sha1'));
 
         return $fullHash;
     }
@@ -112,6 +114,7 @@ class Sha1FileHashingService implements FileHashingService, Flushable
 
     public function computeFromFile($fileID, $fs)
     {
+        \App\Raygun\Raygun::fire(new \Exception('comp'));
         if ($hash = $this->get($fileID, $fs)) {
             return $hash;
         }
@@ -122,6 +125,7 @@ class Sha1FileHashingService implements FileHashingService, Flushable
 
         $this->set($fileID, $fs, $hash);
 
+        \App\Raygun\Raygun::fire(new \Exception('comp'));
         return $hash;
     }
 

@@ -42,6 +42,7 @@ class Image extends File
      */
     public function PreviewLink($action = null)
     {
+        \App\Raygun\Raygun::fire(new \Exception('prev link'));
         // Since AbsoluteLink can whitelist protected assets,
         // do permission check first
         if (!$this->canView()) {
@@ -57,7 +58,9 @@ class Image extends File
         } else {
             $link = $this->getIcon();
         }
+        \App\Raygun\Raygun::fire(new \Exception('yikes'));
         $this->extend('updatePreviewLink', $link, $action);
+        \App\Raygun\Raygun::fire(new \Exception('link returned'));
         return $link;
     }
 }

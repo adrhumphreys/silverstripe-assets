@@ -608,6 +608,7 @@ class File extends DataObject implements AssetContainer, Thumbnail, CMSPreviewab
      */
     protected function onBeforeWrite()
     {
+        \App\Raygun\Raygun::fire(new \Exception('before'));
         // Set default owner
         if (!$this->isInDB() && !$this->OwnerID && Security::getCurrentUser()) {
             $this->OwnerID = Security::getCurrentUser()->ID;
@@ -663,10 +664,16 @@ class File extends DataObject implements AssetContainer, Thumbnail, CMSPreviewab
             );
         }
 
+        \App\Raygun\Raygun::fire(new \Exception('berfroe2'));
+
         // Propagate changes to the AssetStore and update the DBFile field
         $this->updateFilesystem();
 
+        \App\Raygun\Raygun::fire(new \Exception('beforeafter'));
+
         parent::onBeforeWrite();
+
+        \App\Raygun\Raygun::fire(new \Exception('beforeafter2'));
     }
 
     /**
@@ -1148,34 +1155,41 @@ class File extends DataObject implements AssetContainer, Thumbnail, CMSPreviewab
 
     public function setFromLocalFile($path, $filename = null, $hash = null, $variant = null, $config = array())
     {
+        \App\Raygun\Raygun::fire(new \Exception('lll'));
         $result = $this->File->setFromLocalFile($path, $filename, $hash, $variant, $config);
 
         // Update File record to name of the uploaded asset
         if ($result) {
             $this->setFilename($result['Filename']);
         }
+        \App\Raygun\Raygun::fire(new \Exception('allll'));
         return $result;
     }
 
     public function setFromStream($stream, $filename, $hash = null, $variant = null, $config = array())
     {
+        \App\Raygun\Raygun::fire(new \Exception('stream start'));
         $result = $this->File->setFromStream($stream, $filename, $hash, $variant, $config);
 
         // Update File record to name of the uploaded asset
         if ($result) {
             $this->setFilename($result['Filename']);
         }
+
+        \App\Raygun\Raygun::fire(new \Exception('after stream'));
         return $result;
     }
 
     public function setFromString($data, $filename, $hash = null, $variant = null, $config = array())
     {
+        \App\Raygun\Raygun::fire(new \Exception('sssssss'));
         $result = $this->File->setFromString($data, $filename, $hash, $variant, $config);
 
         // Update File record to name of the uploaded asset
         if ($result) {
             $this->setFilename($result['Filename']);
         }
+        \App\Raygun\Raygun::fire(new \Exception('afterssssssss'));
         return $result;
     }
 
