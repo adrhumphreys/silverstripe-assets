@@ -96,4 +96,9 @@ class NaturalFileIDHelper implements FileIDHelper
         $folder = dirname($parsedFileID->getFilename());
         return $folder == '.' ? '' : $folder;
     }
+
+    public function lookForVariantRecursive(): bool
+    {
+        return false;
+    }
 }
